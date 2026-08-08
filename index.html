@@ -12,8 +12,7 @@
      cognitoforms.com URL as a duplicate of this page.
      ============================================================ -->
 <link rel="canonical" href="https://goaloop.co/">
-<meta name="robots" content="index,follow">
-<meta name="robots" content="max-snippet:-1, max-image-preview:large">
+<meta name="robots" content="index,follow,max-snippet:-1,max-image-preview:large">
 
 <meta name="description" content="Apply to join Goaloop - The Goal Market, hiring AI, Micronaut/JVM backend, mobile, and front-end engineers, plus designers and business roles; Manhattan and remote.">
 <meta name="keywords" content="Goaloop careers, internships, tech startup jobs NYC, Micronaut, AI engineer, mobile developer, UX UI front-end developer, Goal Market">
@@ -236,7 +235,8 @@
 
 <style>
   :root {
-    --brand-lavender: #E4DCFB;
+    --brand-lavender: #E4DCFB;   /* unused since 8/7/26 — header is white so the
+                                    master logo sits on white. Kept: brand color. */
     --brand-purple:   #5a00bc;
     --ink:            #1A1A2E;
     --page-bg:        #F7F5FC;
@@ -281,7 +281,7 @@
      -------------------------------------------------------------- */
   header.site {
     display: none;
-    background: var(--brand-lavender);
+    background: #FFFFFF;
     padding: 1.5rem 1.25rem;
     text-align: center;
     border-bottom: 1px solid var(--rule);
@@ -319,19 +319,31 @@
   footer.site p { margin: .3rem 0; }
 
   /* ---- Cognito Forms overrides ---------------------------------
-     Cognito exposes no error-color control in its UI, so the
-     validation palette is set here. --negative drives error
-     messages, the required asterisk, and the focus highlight.
-     --negative-reverse is the text color that sits on top of it.
+     ⚠️ The error palette is NOT set here. Verified live 8/7/26:
+     a stylesheet rule on .cog-cognito does NOT work. The seamless
+     embed renders a <form> carrying cog-cognito--protect-css,
+     Cognito's style-isolation mode, and its own rules win.
 
-     ⚠️ #03f1ee is the TEST value chosen 8/6/26, not a final
-     brand color. Swap both values and re-check readability by
-     submitting the form with Name left blank.
+     The working fix is setting --negative INLINE on that element,
+     which beats the isolation. See the script at the end of <body>.
+
+     Cognito exposes no UI control for this color — checked
+     Publish > Form Styles (no error color) and Publish > Theme >
+     Custom Styles (not a CSS editor, only "Save as New Theme").
+     The wrapper page is the only lever, and only inline.
      -------------------------------------------------------------- */
   .cog-cognito {
-    --negative:         #03f1ee;
-    --negative-reverse: #003331;
     --font-family: "Open Sans", sans-serif;
+  }
+
+  /* Centers the form heading that Cognito renders into the page.
+     ⚠️ UNVERIFIED — these class names are inferred from Cognito's
+     V2 renderer and have not been checked against the live embed.
+     If the heading does not move, inspect the rendered markup and
+     correct the selector. Harmless if it matches nothing. */
+  .cog-cognito .cognito .c-forms-form .c-editor > h1,
+  .cog-cognito .cognito .c-forms-form .c-editor > h2 {
+    text-align: center;
   }
 
   /* Hidden from sight, present for search engines and screen readers */
@@ -400,6 +412,136 @@
   <p>GOALOOP is patent pending.</p>
   <p>&copy; 2010 – 2026 G Project Inc. All rights reserved.</p>
 </footer>
+
+<!-- ============================================================
+     COGNITO EMBED FIXES
+     Three things the wrapper page has to do that Cognito can't:
+     (1) the validation color, (2) radio-row vertical alignment,
+     (3) dropping the period from "or drag files here."
+
+     Why a script and not CSS: the form carries
+     cog-cognito--protect-css, Cognito's style-isolation mode.
+     A stylesheet rule on .cog-cognito is ignored — verified live
+     8/7/26. Setting properties inline on the elements beats the
+     isolation. This is the only method that works.
+
+     --negative drives ALL of: the required-field asterisk, the
+     field outline, the error message bar, and a pale wash behind
+     the field in its error state.
+     --negative-reverse is the text color on top of the bar.
+
+     #A300A9 measures 5.4:1 on white — clears the 4.5:1 AA floor,
+     which matters for the asterisk and label. Chosen 8/7/26 over
+     #d700ea (4.2:1, under AA) and deliberately kept clear of the
+     brand purple #5a00bc so the brand color is never the error
+     color.
+
+     ⚠️ Cognito's Highlight color (Publish > Form Styles) was set
+     to match by hand. They are separate settings — change one and
+     the checked-radio color drifts from the error color.
+
+     The form renders asynchronously and re-renders during use, so
+     this runs on a MutationObserver that stays connected for the
+     life of the page. Every write is guarded, so re-running is
+     cheap. See the note above the observer for why it does not
+     disconnect.
+     ============================================================ -->
+<script>
+(function () {
+  var NEGATIVE = '#A300A9';
+  var REVERSE  = '#FFFFFF';
+
+  function paint() {
+    var form = document.querySelector('.cog-cognito');
+    if (!form) return false;
+    if (form.style.getPropertyValue('--negative') !== NEGATIVE) {
+      form.style.setProperty('--negative', NEGATIVE, 'important');
+      form.style.setProperty('--negative-reverse', REVERSE, 'important');
+    }
+    stripDragTextPeriod(form);
+    return alignInlineRadios(form);
+  }
+
+  /* ---- Upload prompt punctuation -------------------------------
+     Cognito's file-upload fields render "or drag files here." —
+     a trailing period on a fragment that sits beside an Upload
+     button. Dropped for consistency with the other field prompts.
+
+     Three instances: Cover Letter, Résumé, Writing Sample.
+
+     ⚠️ This edits rendered text, NOT Cognito's documented text
+     override API:
+     cognitoforms.com/support/24/building-forms/override-default-text-values
+     Fine for deleting one character. If these strings ever need
+     real rewording, use the API instead — it survives re-renders
+     by design, this does not.
+
+     Runs on every observer tick rather than once, in case Cognito
+     re-renders an upload field (it does after a file is attached).
+     -------------------------------------------------------------- */
+  function stripDragTextPeriod(form) {
+    form.querySelectorAll('.cog-upload__drag-text').forEach(function (el) {
+      var t = el.textContent.replace(/\.\s*$/, '');
+      if (t !== el.textContent) el.textContent = t;
+    });
+  }
+
+  /* ---- Radio-row vertical alignment ----------------------------
+     Cognito renders a radio group that shares a row with another
+     field flush to the TOP of the row, so its buttons sit level
+     with the neighbouring field's LABEL rather than its input box.
+     Visible on "Hours Available" — the Weekly/Monthly pair floated
+     above the number box.
+
+     ⚠️ BOTH properties are required. Verified live 8/7/26:
+       - margin-top alone does nothing. The fieldset stretches to
+         the row's full height, so shrinking it just lets the
+         content re-centre itself — net zero movement.
+       - align-items:center alone does nothing either, for the
+         same reason: a stretched box is already "centred".
+       - Together they work. Centring stops the stretch, and the
+         margin then actually displaces the box.
+     Removing either one silently undoes the fix.
+
+     Only radio groups with a HIDDEN label need this. A visible
+     label already pushes its buttons down by its own height, and
+     nudging those would misalign them. Cognito marks a hidden one
+     with cog-offscreen on the <legend>, which is what this tests —
+     deliberately NOT the generated cog-field--124 class, which is
+     tied to field ID and changes if the form is rebuilt. Confirmed
+     to match exactly 1 fieldset: Weekly/Monthly, not Yes/No.
+
+     1.6rem lines the buttons up with the input box. Retune if the
+     label font size changes.
+     -------------------------------------------------------------- */
+  function alignInlineRadios(form) {
+    var done = false;
+    form.querySelectorAll('.cog-choice--radiobuttons').forEach(function (fs) {
+      var legend = fs.querySelector('legend.cog-offscreen');
+      if (!legend) return;
+      var row = fs.closest('.cog-row');
+      if (!row || row.children.length < 2) return;  // alone in its row
+      if (fs.style.marginTop !== '1.6rem') {
+        row.style.setProperty('align-items', 'center', 'important');
+        fs.style.setProperty('margin-top', '1.6rem', 'important');
+      }
+      done = true;
+    });
+    return done;
+  }
+
+  paint();
+
+  /* The observer intentionally does NOT disconnect. Cognito
+     re-renders parts of the form during use — attaching a file
+     rebuilds the upload field, which restores the period we just
+     removed. A one-shot observer would leave those re-renders
+     unpatched. paint() is only a handful of querySelectorAll calls
+     and every write is guarded, so re-running it is cheap. */
+  new MutationObserver(function () { paint(); })
+    .observe(document.body, { childList: true, subtree: true });
+})();
+</script>
 
 </body>
 </html>
