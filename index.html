@@ -61,9 +61,6 @@
 
 <link rel="icon" href="/favicon.ico">
 <link rel="preconnect" href="https://www.cognitoforms.com">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
 
 <!-- ============================================================
      STRUCTURED DATA
@@ -301,7 +298,8 @@
     margin: 0;
     background: var(--page-bg);
     color: var(--ink);
-    font-family: "Open Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+                 "Helvetica Neue", Arial, sans-serif;
     font-size: 16px;
     line-height: 1.6;
   }
@@ -382,7 +380,8 @@
      The wrapper page is the only lever, and only inline.
      -------------------------------------------------------------- */
   .cog-cognito {
-    --font-family: "Open Sans", sans-serif;
+    --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+                   "Helvetica Neue", Arial, sans-serif;
   }
 
   /* Centers the form heading that Cognito renders into the page.
@@ -444,10 +443,15 @@
   <h1 class="visually-hidden">Join the Goaloop Team — Openings at Goaloop, The Goal Market®</h1>
 
   <div class="panel">
-    <!-- Cognito Forms seamless embed.
+    <!-- Cognito Forms IFRAME embed.
+         Switched from the Seamless embed 8/13/26 for load time —
+         Cognito's own docs recommend Iframe when Seamless is slow.
          Intro copy, openings, and application fields are all managed
-         inside Cognito so they can be edited without a redeploy. -->
-    <script src="https://www.cognitoforms.com/f/seamless.js" data-key="jXV-LEftJkeyn0gkJV44WA" data-form="1"></script>
+         inside Cognito so they can be edited without a redeploy.
+         iframe.js auto-resizes the frame; the height below is only
+         the pre-script fallback. The id is required by setCss(). -->
+    <iframe id="form1" src="https://www.cognitoforms.com/f/jXV-LEftJkeyn0gkJV44WA/1" allow="payment" style="border:0;width:100%;" height="3219"></iframe>
+    <script src="https://www.cognitoforms.com/f/iframe.js"></script>
     <noscript>
       <p><strong>This application form requires JavaScript.</strong>
       Please enable JavaScript, or email a cover letter and résumé to
@@ -496,100 +500,51 @@
      disconnect.
      ============================================================ -->
 <script>
-(function () {
-  var NEGATIVE = '#A300A9';
-  var REVERSE  = '#FFFFFF';
+/* ---- Cognito iframe styling ----------------------------------
+   The Seamless embed let us reach into the form's DOM directly.
+   The Iframe embed does not, so everything below is injected
+   INTO the frame with Cognito.setCss().
 
-  function paint() {
-    var form = document.querySelector('.cog-cognito');
-    if (!form) return false;
-    if (form.style.getPropertyValue('--negative') !== NEGATIVE) {
-      form.style.setProperty('--negative', NEGATIVE, 'important');
-      form.style.setProperty('--negative-reverse', REVERSE, 'important');
-    }
-    stripDragTextPeriod(form);
-    return alignInlineRadios(form);
+   ⚠️ UNVERIFIED — test live before trusting:
+     - Whether setCss() penetrates cog-cognito--protect-css
+     - Whether :has() correctly isolates the Hours Available row
+
+   ⚠️ LOST in the switch: the trailing period on Cognito's
+   "or drag files here." upload prompt (Cover Letter, Résumé,
+   Writing Sample). That was a text edit, not a style, and CSS
+   cannot do it. Recover via Cognito's text-override setting:
+   cognitoforms.com/support/24/building-forms/override-default-text-values
+   -------------------------------------------------------------- */
+Cognito.setCss(`
+  /* Error color — #A300A9 chosen for AA contrast (5.4:1).
+     Brand purple #5a00bc is deliberately NOT used for errors. */
+  .cog-cognito {
+    --negative: #A300A9 !important;
+    --negative-reverse: #FFFFFF !important;
   }
 
-  /* ---- Upload prompt punctuation -------------------------------
-     Cognito's file-upload fields render "or drag files here." —
-     a trailing period on a fragment that sits beside an Upload
-     button. Dropped for consistency with the other field prompts.
+  /* Radio-row vertical alignment.
+     Cognito floats a radio group flush to the TOP of a shared row,
+     level with the neighbouring field's LABEL instead of its input.
+     BOTH rules are required — verified 8/7/26 under the Seamless
+     embed. Either one alone does nothing: the fieldset stretches to
+     the row's full height, so centring alone is a no-op and margin
+     alone just lets the content re-centre itself.
 
-     Three instances: Cover Letter, Résumé, Writing Sample.
-
-     ⚠️ This edits rendered text, NOT Cognito's documented text
-     override API:
-     cognitoforms.com/support/24/building-forms/override-default-text-values
-     Fine for deleting one character. If these strings ever need
-     real rewording, use the API instead — it survives re-renders
-     by design, this does not.
-
-     Runs on every observer tick rather than once, in case Cognito
-     re-renders an upload field (it does after a file is attached).
-     -------------------------------------------------------------- */
-  function stripDragTextPeriod(form) {
-    form.querySelectorAll('.cog-upload__drag-text').forEach(function (el) {
-      var t = el.textContent.replace(/\.\s*$/, '');
-      if (t !== el.textContent) el.textContent = t;
-    });
+     Guards, matching the old JS exactly:
+       - legend.cog-offscreen  = hidden label only. A visible label
+         already pushes its buttons down by its own height.
+       - :nth-child(2)         = fieldset shares the row. Alone in
+         its row, it needs no nudge.
+     Deliberately NOT keyed to cog-field--124, which is tied to
+     field ID and changes if the form is rebuilt. */
+  .cog-row:has(> :nth-child(2)):has(.cog-choice--radiobuttons legend.cog-offscreen) {
+    align-items: center !important;
   }
-
-  /* ---- Radio-row vertical alignment ----------------------------
-     Cognito renders a radio group that shares a row with another
-     field flush to the TOP of the row, so its buttons sit level
-     with the neighbouring field's LABEL rather than its input box.
-     Visible on "Hours Available" — the Weekly/Monthly pair floated
-     above the number box.
-
-     ⚠️ BOTH properties are required. Verified live 8/7/26:
-       - margin-top alone does nothing. The fieldset stretches to
-         the row's full height, so shrinking it just lets the
-         content re-centre itself — net zero movement.
-       - align-items:center alone does nothing either, for the
-         same reason: a stretched box is already "centred".
-       - Together they work. Centring stops the stretch, and the
-         margin then actually displaces the box.
-     Removing either one silently undoes the fix.
-
-     Only radio groups with a HIDDEN label need this. A visible
-     label already pushes its buttons down by its own height, and
-     nudging those would misalign them. Cognito marks a hidden one
-     with cog-offscreen on the <legend>, which is what this tests —
-     deliberately NOT the generated cog-field--124 class, which is
-     tied to field ID and changes if the form is rebuilt. Confirmed
-     to match exactly 1 fieldset: Weekly/Monthly, not Yes/No.
-
-     1.6rem lines the buttons up with the input box. Retune if the
-     label font size changes.
-     -------------------------------------------------------------- */
-  function alignInlineRadios(form) {
-    var done = false;
-    form.querySelectorAll('.cog-choice--radiobuttons').forEach(function (fs) {
-      var legend = fs.querySelector('legend.cog-offscreen');
-      if (!legend) return;
-      var row = fs.closest('.cog-row');
-      if (!row || row.children.length < 2) return;  // alone in its row
-      if (fs.style.marginTop !== '1.6rem') {
-        row.style.setProperty('align-items', 'center', 'important');
-        fs.style.setProperty('margin-top', '1.6rem', 'important');
-      }
-      done = true;
-    });
-    return done;
+  .cog-choice--radiobuttons:has(legend.cog-offscreen) {
+    margin-top: 1.6rem !important;
   }
-
-  paint();
-
-  /* The observer intentionally does NOT disconnect. Cognito
-     re-renders parts of the form during use — attaching a file
-     rebuilds the upload field, which restores the period we just
-     removed. A one-shot observer would leave those re-renders
-     unpatched. paint() is only a handful of querySelectorAll calls
-     and every write is guarded, so re-running it is cheap. */
-  new MutationObserver(function () { paint(); })
-    .observe(document.body, { childList: true, subtree: true });
-})();
+`);
 </script>
 
 </body>
