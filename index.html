@@ -365,35 +365,6 @@
 
   footer.site p { margin: .3rem 0; }
 
-  /* ---- Cognito Forms overrides ---------------------------------
-     ⚠️ The error palette is NOT set here. Verified live 8/7/26:
-     a stylesheet rule on .cog-cognito does NOT work. The seamless
-     embed renders a <form> carrying cog-cognito--protect-css,
-     Cognito's style-isolation mode, and its own rules win.
-
-     The working fix is setting --negative INLINE on that element,
-     which beats the isolation. See the script at the end of <body>.
-
-     Cognito exposes no UI control for this color — checked
-     Publish > Form Styles (no error color) and Publish > Theme >
-     Custom Styles (not a CSS editor, only "Save as New Theme").
-     The wrapper page is the only lever, and only inline.
-     -------------------------------------------------------------- */
-  .cog-cognito {
-    --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-                   "Helvetica Neue", Arial, sans-serif;
-  }
-
-  /* Centers the form heading that Cognito renders into the page.
-     ⚠️ UNVERIFIED — these class names are inferred from Cognito's
-     V2 renderer and have not been checked against the live embed.
-     If the heading does not move, inspect the rendered markup and
-     correct the selector. Harmless if it matches nothing. */
-  .cog-cognito .cognito .c-forms-form .c-editor > h1,
-  .cog-cognito .cognito .c-forms-form .c-editor > h2 {
-    text-align: center;
-  }
-
   /* Hidden from sight, present for search engines and screen readers */
   .visually-hidden {
     position: absolute;
@@ -450,7 +421,7 @@
          inside Cognito so they can be edited without a redeploy.
          iframe.js auto-resizes the frame; the height below is only
          the pre-script fallback. The id is required by setCss(). -->
-    <iframe id="form1" src="https://www.cognitoforms.com/f/jXV-LEftJkeyn0gkJV44WA/1" allow="payment" style="border:0;width:100%;" height="3219"></iframe>
+    <iframe id="form1" title="Application to Join the Goaloop Team" src="https://www.cognitoforms.com/f/jXV-LEftJkeyn0gkJV44WA/1" allow="payment" style="border:0;width:100%;" height="3219"></iframe>
     <script src="https://www.cognitoforms.com/f/iframe.js"></script>
     <noscript>
       <p><strong>This application form requires JavaScript.</strong>
@@ -468,15 +439,27 @@
 
 <!-- ============================================================
      COGNITO EMBED FIXES
-     Three things the wrapper page has to do that Cognito can't:
-     (1) the validation color, (2) radio-row vertical alignment,
-     (3) dropping the period from "or drag files here."
+     Two things the wrapper page still has to do that Cognito's
+     own settings can't: (1) the validation color, (2) radio-row
+     vertical alignment.
 
-     Why a script and not CSS: the form carries
-     cog-cognito--protect-css, Cognito's style-isolation mode.
-     A stylesheet rule on .cog-cognito is ignored — verified live
-     8/7/26. Setting properties inline on the elements beats the
-     isolation. This is the only method that works.
+     How this works NOW (Iframe embed, since 8/13/26):
+     the form lives in a cross-origin iframe, so this page cannot
+     touch its DOM at all. Styles are handed to Cognito's own
+     iframe.js via Cognito.setCss(), which injects them INSIDE the
+     frame. Verified live 8/13/26 — both rules apply.
+
+     Superseded: under the old Seamless embed this was a script
+     that wrote inline styles and re-ran on a MutationObserver,
+     because a stylesheet rule on .cog-cognito was ignored by
+     cog-cognito--protect-css. None of that applies anymore.
+     setCss() reaches inside the isolation on its own.
+
+     Also lost in that switch, deliberately: the period was being
+     stripped from Cognito's "or drag files here." upload prompt
+     on three fields. That was a text edit, not a style, and CSS
+     cannot do it from outside the frame. Recover through
+     Cognito's text-override setting if it ever matters.
 
      --negative drives ALL of: the required-field asterisk, the
      field outline, the error message bar, and a pale wash behind
@@ -492,12 +475,6 @@
      ⚠️ Cognito's Highlight color (Publish > Form Styles) was set
      to match by hand. They are separate settings — change one and
      the checked-radio color drifts from the error color.
-
-     The form renders asynchronously and re-renders during use, so
-     this runs on a MutationObserver that stays connected for the
-     life of the page. Every write is guarded, so re-running is
-     cheap. See the note above the observer for why it does not
-     disconnect.
      ============================================================ -->
 <script>
 /* ---- Cognito iframe styling ----------------------------------
@@ -505,9 +482,9 @@
    The Iframe embed does not, so everything below is injected
    INTO the frame with Cognito.setCss().
 
-   ⚠️ UNVERIFIED — test live before trusting:
-     - Whether setCss() penetrates cog-cognito--protect-css
-     - Whether :has() correctly isolates the Hours Available row
+   Verified live 8/13/26:
+     - setCss() does penetrate cog-cognito--protect-css
+     - :has() correctly isolates the Hours Available row
 
    ⚠️ LOST in the switch: the trailing period on Cognito's
    "or drag files here." upload prompt (Cover Letter, Résumé,
@@ -515,7 +492,8 @@
    cannot do it. Recover via Cognito's text-override setting:
    cognitoforms.com/support/24/building-forms/override-default-text-values
    -------------------------------------------------------------- */
-Cognito.setCss(`
+if (window.Cognito && typeof Cognito.setCss === "function") {
+  Cognito.setCss(`
   /* Error color — #A300A9 chosen for AA contrast (5.4:1).
      Brand purple #5a00bc is deliberately NOT used for errors. */
   .cog-cognito {
@@ -545,6 +523,7 @@ Cognito.setCss(`
     margin-top: 1.6rem !important;
   }
 `);
+}
 </script>
 
 </body>
