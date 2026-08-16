@@ -72,184 +72,205 @@
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "WebPage",
-  "name": "Join the Goaloop Team",
-  "url": "https://goaloop.co/",
-  "description": "Application portal for roles at Goaloop — The Goal Market®.",
-  "significantLink": [
-    "https://goaloop.com/",
-    "https://entrepreneurship.columbia.edu/startup/goaloop-2/"
-  ],
-  "about": {
-    "@type": "Organization",
-    "name": "GOALOOP - The Goal Market®",
-    "alternateName": ["Goaloop", "The Goal Market", "The Goal Network", "The Goal Engine", "The Goal Manager"],
-    "url": "https://goaloop.com/",
-    "logo": "https://goaloop.co/images/Goaloop-Icon-white-bg-600x600.png",
-    "slogan": "Connecting the World Through Goals®",
-    "description": "Goaloop is the world's Goal Market® — a platform that connects people by what their goals are rather than who they know, organizing productivity around the goal as a common denominator. Patent pending, with an extensive registered trademark portfolio.",
-    "foundingLocation": {
-      "@type": "Place",
-      "address": {
-        "@type": "PostalAddress",
-        "addressLocality": "New York",
-        "addressRegion": "NY",
-        "addressCountry": "US"
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": "https://goaloop.co/#website",
+      "url": "https://goaloop.co/",
+      "name": "Join the Goaloop Team",
+      "inLanguage": "en-US",
+      "publisher": {
+        "@id": "https://goaloop.com/#organization"
       }
     },
-    "location": {
-      "@type": "Place",
-      "name": "Near Columbia University's main campus, Manhattan",
-      "address": {
-        "@type": "PostalAddress",
-        "addressLocality": "New York",
-        "addressRegion": "NY",
-        "addressCountry": "US"
+    {
+      "@type": "WebPage",
+      "@id": "https://goaloop.co/#webpage",
+      "url": "https://goaloop.co/",
+      "name": "Join the Goaloop Team",
+      "isPartOf": {
+        "@id": "https://goaloop.co/#website"
+      },
+      "description": "Application portal for roles at Goaloop — The Goal Market®.",
+      "significantLink": [
+        "https://goaloop.com/",
+        "https://entrepreneurship.columbia.edu/startup/goaloop-2/"
+      ],
+      "about": {
+        "@id": "https://goaloop.com/#organization"
+      },
+      "mentions": [
+        { "@id": "https://goaloop.co/#possibilities-article" },
+        { "@id": "https://goaloop.co/#cornell-intern-article" }
+      ],
+      "potentialAction": {
+        "@type": "ApplyAction",
+        "target": "https://goaloop.co/",
+        "name": "Submit an application to join the Goaloop team"
       }
     },
-    "founder": {
-      "@type": "Person",
-      "name": "Lori Terrizzi",
-      "jobTitle": "CEO/Founder and Site Architect",
-      "url": "https://loriterrizzi.org",
-      "mainEntityOfPage": {
-        "@type": "WebPage",
-        "url": "https://loriterrizzi.org/about.html",
-        "name": "About Lori Terrizzi"
+    {
+      "@type": "Organization",
+      "@id": "https://goaloop.com/#organization",
+      "name": "GOALOOP - The Goal Market®",
+      "alternateName": ["Goaloop", "The Goal Market", "The Goal Network", "The Goal Engine", "The Goal Manager"],
+      "url": "https://goaloop.com/",
+      "logo": "https://goaloop.co/images/Goaloop-Icon-white-bg-600x600.png",
+      "slogan": "Connecting the World Through Goals®",
+      "description": "Goaloop is the world's Goal Market® — a platform that connects people by the common denominator of our goals. Patent pending, with an extensive registered trademark portfolio.",
+      "foundingLocation": {
+        "@type": "Place",
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "New York",
+          "addressRegion": "NY",
+          "addressCountry": "US"
+        }
       },
-      "subjectOf": {
-        "@type": "CollectionPage",
-        "url": "https://loriterrizzi.org/works.html",
-        "name": "Works by Lori Terrizzi"
+      "location": {
+        "@type": "Place",
+        "name": "Near Columbia University's main campus, Manhattan",
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "New York",
+          "addressRegion": "NY",
+          "addressCountry": "US"
+        }
       },
-      "sameAs": [
-        "https://www.linkedin.com/in/loriterrizzi/",
-        "https://goaloop.com/loriterrizzi",
-        "https://goaloop.org/about/#founder"
-      ]
-    },
-    "memberOf": [
-      {
-        "@type": "Organization",
-        "name": "YWCA of the City of New York",
-        "url": "https://www.yw-nyc.org/"
+      "founder": {
+        "@id": "https://loriterrizzi.org/#person"
       },
-      {
-        "@type": "Organization",
-        "name": "Ellevate Network",
-        "alternateName": "85 Broads",
-        "url": "https://ellevatenetwork.com/"
-      },
-      {
-        "@type": "Organization",
-        "name": "Arrowhead United Way",
-        "url": "https://www.arrowheadunitedway.org/"
-      }
-    ],
-    "disambiguatingDescription": "Launch partners include the YWCA of the City of New York, Ellevate Network (formerly 85 Broads), and Arrowhead United Way.",
-    "knowsAbout": [
-      "Goal Achievement",
-      "Social Impact Technology",
-      "Artificial Intelligence",
-      "Large Language Models",
-      "AI Agents",
-      "Micronaut Framework",
-      "Java",
-      "Kotlin",
-      "JVM",
-      "Microservices",
-      "Mobile Application Development",
-      "Collaboration Platforms",
-      "Productivity Software",
-      "Stakeholder Capitalism"
-    ],
-    "sameAs": [
-      "https://goaloop.com/",
-      "https://goaloop.org/",
-      "https://www.linkedin.com/company/goaloop",
-      "https://www.instagram.com/goaloop/",
-      "https://x.com/goaloop",
-      "https://bsky.app/profile/goaloop.bsky.social",
-      "https://www.youtube.com/goaloop",
-      "https://www.facebook.com/goaloop",
-      "https://wellfound.com/company/goaloop/people",
-      "https://www.pinterest.com/goaloop/",
-      "https://medium.com/@goaloop",
-      "https://entrepreneurship.columbia.edu/startup/goaloop-2/"
-    ],
-    "subjectOf": [
-      {
-        "@type": "WebPage",
-        "name": "Goaloop — Columbia University Entrepreneurship",
-        "url": "https://entrepreneurship.columbia.edu/startup/goaloop-2/",
-        "publisher": {
-          "@type": "CollegeOrUniversity",
-          "name": "Columbia University",
-          "url": "https://www.columbia.edu/"
+      "memberOf": [
+        {
+          "@type": "Organization",
+          "name": "YWCA of the City of New York",
+          "url": "https://www.yw-nyc.org/"
         },
-        "about": { "@type": "Organization", "name": "GOALOOP - The Goal Market®" }
-      },
-      {
-        "@type": "Article",
-        "name": "Goaloop — The Possibilities Are Endless",
-        "url": "https://medium.com/@goaloop/goaloop-the-possibilities-are-endless-4cd7b8fc0524",
-        "author": { "@type": "Person", "name": "Jack Kim" }
-      },
-      {
-        "@type": "Article",
-        "name": "3 Reasons to Intern at a Startup Company",
-        "url": "https://business.cornell.edu/news/2019/01/04/three-reasons-intern-startup/",
-        "author": { "@type": "Person", "name": "Julio López Ramos" },
-        "publisher": { "@type": "Organization", "name": "Cornell SC Johnson College of Business" },
-        "datePublished": "2019-01-04"
-      },
-      {
-        "@type": "CreativeWork",
-        "text": "Goaloop seamlessly integrates useful features within a results-oriented framework. It is a structural change. The cross-pollination built into the design promises commercial opportunities otherwise unlikely. Goaloop is potentially revolutionary.",
-        "author": {
-          "@type": "Person",
-          "name": "Jack Kim",
-          "honorificSuffix": "PhD",
-          "jobTitle": "Founding Member",
-          "affiliation": { "@type": "Organization", "name": "GOALOOP - The Goal Market®" },
-          "alumniOf": { "@type": "CollegeOrUniversity", "name": "Stanford University" },
-          "description": "Quantitative Finance, Stanford University, formerly of JPMorgan Chase"
+        {
+          "@type": "Organization",
+          "name": "Ellevate Network",
+          "alternateName": "85 Broads",
+          "url": "https://ellevatenetwork.com/"
+        },
+        {
+          "@type": "Organization",
+          "name": "Arrowhead United Way",
+          "url": "https://www.arrowheadunitedway.org/"
         }
-      },
-      {
-        "@type": "CreativeWork",
-        "text": "Goaloop is innovative, timely, exciting, and inspirational. Goaloop provides a starting point, not a blank sheet. Many more ideas will be innovated on top of it, and in its framework.",
-        "author": {
-          "@type": "Person",
-          "name": "Michael Chen",
-          "honorificSuffix": "PhD",
-          "jobTitle": "Advisor, Advisory Board",
-          "affiliation": { "@type": "Organization", "name": "GOALOOP - The Goal Market®" },
-          "alumniOf": { "@type": "CollegeOrUniversity", "name": "Princeton University" },
-          "description": "Computer Science, Princeton University, formerly of Microsoft Research and Facebook"
+      ],
+      "disambiguatingDescription": "Launch partners include the YWCA of the City of New York, Ellevate Network (formerly 85 Broads), and Arrowhead United Way.",
+      "knowsAbout": [
+        "Goal Setting",
+        "Goal Tracking",
+        "Goal Achievement",
+        "Progress Tracking",
+        "Accountability",
+        "Social Accountability",
+        "Personal Development",
+        "Self-Improvement",
+        "Social Impact Technology",
+        "Artificial Intelligence",
+        "Large Language Models",
+        "AI Agents",
+        "Micronaut Framework",
+        "Java",
+        "JVM",
+        "Microservices",
+        "Mobile Application Development",
+        "Backend Engineering",
+        "Collaboration Platforms",
+        "Productivity Software",
+        "Stakeholder Capitalism",
+        "Remote Work",
+        "Freedom",
+        "Human Rights",
+        "Economic Justice"
+      ],
+      "sameAs": [
+        "https://goaloop.com/",
+        "https://goaloop.org/",
+        "https://www.linkedin.com/company/goaloop",
+        "https://www.instagram.com/goaloop/",
+        "https://x.com/goaloop",
+        "https://bsky.app/profile/goaloop.bsky.social",
+        "https://www.youtube.com/goaloop",
+        "https://www.facebook.com/goaloop",
+        "https://wellfound.com/company/goaloop/people",
+        "https://www.pinterest.com/goaloop/",
+        "https://medium.com/@goaloop",
+        "https://entrepreneurship.columbia.edu/startup/goaloop-2/"
+      ],
+      "subjectOf": [
+        {
+          "@type": "WebPage",
+          "name": "Goaloop — Columbia University Entrepreneurship",
+          "url": "https://entrepreneurship.columbia.edu/startup/goaloop-2/",
+          "publisher": {
+            "@type": "CollegeOrUniversity",
+            "name": "Columbia University",
+            "url": "https://www.columbia.edu/"
+          },
+          "about": { "@type": "Organization", "name": "GOALOOP - The Goal Market®" }
+        },
+        {
+          "@type": "Article",
+          "@id": "https://goaloop.co/#possibilities-article",
+          "name": "Goaloop — The Possibilities Are Endless",
+          "url": "https://medium.com/@goaloop/goaloop-the-possibilities-are-endless-4cd7b8fc0524",
+          "author": { "@type": "Person", "name": "Jack Kim" }
+        },
+        {
+          "@type": "Article",
+          "@id": "https://goaloop.co/#cornell-intern-article",
+          "name": "3 Reasons to Intern at a Startup Company",
+          "url": "https://business.cornell.edu/news/2019/01/04/three-reasons-intern-startup/",
+          "author": { "@type": "Person", "name": "Julio López Ramos" },
+          "publisher": { "@type": "Organization", "name": "Cornell SC Johnson College of Business" },
+          "datePublished": "2019-01-04"
+        },
+        {
+          "@type": "CreativeWork",
+          "text": "Goaloop seamlessly integrates useful features within a results-oriented framework. It is a structural change. The cross-pollination built into the design promises commercial opportunities otherwise unlikely. Goaloop is potentially revolutionary.",
+          "author": {
+            "@type": "Person",
+            "name": "Jack Kim",
+            "honorificSuffix": "PhD",
+            "jobTitle": "Founding Member",
+            "affiliation": { "@type": "Organization", "name": "GOALOOP - The Goal Market®" },
+            "alumniOf": { "@type": "CollegeOrUniversity", "name": "Stanford University" },
+            "description": "Quantitative Finance, Stanford University, formerly of JPMorgan Chase"
+          }
+        },
+        {
+          "@type": "CreativeWork",
+          "text": "Goaloop is innovative, timely, exciting, and inspirational. Goaloop provides a starting point, not a blank sheet. Many more ideas will be innovated on top of it, and in its framework.",
+          "author": {
+            "@type": "Person",
+            "name": "Michael Chen",
+            "honorificSuffix": "PhD",
+            "jobTitle": "Advisor, Advisory Board",
+            "affiliation": { "@type": "Organization", "name": "GOALOOP - The Goal Market®" },
+            "alumniOf": { "@type": "CollegeOrUniversity", "name": "Princeton University" },
+            "description": "Computer Science, Princeton University, formerly of Microsoft Research and Facebook"
+          }
+        },
+        {
+          "@type": "CreativeWork",
+          "text": "Anyone in the world with a mobile device and internet connectivity can find work and be productive using Goaloop. It will knit social responsibility into the fabric of modern capitalist economies.",
+          "author": {
+            "@type": "Person",
+            "name": "Shankha Dey",
+            "alternateName": "Shubho Dey",
+            "honorificSuffix": "MS",
+            "alumniOf": { "@type": "CollegeOrUniversity", "name": "Columbia University" },
+            "description": "Computer Science, Columbia University, formerly of Microsoft (Bing)"
+          }
         }
-      },
-      {
-        "@type": "CreativeWork",
-        "text": "Anyone in the world with a mobile device and internet connectivity can find work and be productive using Goaloop. It will knit social responsibility into the fabric of modern capitalist economies.",
-        "author": {
-          "@type": "Person",
-          "name": "Shankha Dey",
-          "alternateName": "Shubho Dey",
-          "honorificSuffix": "MS",
-          "alumniOf": { "@type": "CollegeOrUniversity", "name": "Columbia University" },
-          "description": "Computer Science, Columbia University, formerly of Microsoft (Bing)"
-        }
-      }
-    ]
-  },
-  "mentions": {
-    "@type": "Article",
-    "genre": "Movie Treatment",
-    "name": "Raising Liberty: The Construction of the Statue of Liberty as Reconstruction Was Under Attack",
-    "url": "https://medium.com/@goaloop/raising-liberty-1235946119aa",
-    "author": {
+      ]
+    },
+    {
       "@type": "Person",
+      "@id": "https://loriterrizzi.org/#person",
       "name": "Lori Terrizzi",
       "jobTitle": "CEO/Founder and Site Architect",
       "url": "https://loriterrizzi.org",
@@ -264,18 +285,13 @@
         "name": "Works by Lori Terrizzi"
       },
       "sameAs": [
-        "https://www.linkedin.com/in/loriterrizzi/",
+        "https://loriterrizzi.org",
         "https://goaloop.com/loriterrizzi",
-        "https://goaloop.org/about/#founder"
+        "https://goaloop.org/about.html#founder",
+        "https://www.linkedin.com/in/loriterrizzi/"
       ]
-    },
-    "about": ["Human Rights", "Reconstruction", "Economic Justice"]
-  },
-  "potentialAction": {
-    "@type": "ApplyAction",
-    "target": "https://goaloop.co/",
-    "name": "Submit an application to join the Goaloop team"
-  }
+    }
+  ]
 }
 </script>
 
